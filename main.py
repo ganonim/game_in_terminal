@@ -1,31 +1,33 @@
 import os
-import getpass
-import socket
+import json
+import time
+import keyboard
 
-# map
-x = 8
-y = 8
+with open('data.json', 'r') as file:
+	data = json.load(file)
 
-# graphic
-for i in range(1, y+1):
-	for j in range(1, x+1):
-		if i == 1:
-			print(chr(63+j), end=" ")
-		elif j == 1:
-			print(i-2, end=" ")
-		else:
-			print("$", end=" ")
-	print()
+hero_x = 8
+hero_y = 8
 
-# comander
-usr = getpass.getuser()
-hostname = socket.gethostname()
-current_directory = os.getcwd()
-a = input(usr + "$" + hostname + " ~" + current_directory +" > ")
+while True:
+	if keyboard.is_pressed('up'):
+		hero_y = hero_y-1
+	elif keyboard.is_pressed('down'):
+		hero_y = hero_y+1
+	elif keyboard.is_pressed('left'):
+		hero_x = hero_x-1
+	elif keyboard.is_pressed('right'):
+		hero_x = hero_x+1
+	elif keyboard.is_pressed('esc'):
+		exit()
 
-# input comand
-if a == "bye" or "exit":
-	print("good bueee~")
-	exit()
-elif a == "set":
-	
+	os.system('clear')
+	data[hero_y][hero_x] = "@"
+	for i in range(len(data)):
+		for j in range(len(data[0])):
+			print(data[i][j], end=" ")
+		print()
+
+	with open('data.json', 'r') as file:
+		data = json.load(file)
+	time.sleep(0.1)
