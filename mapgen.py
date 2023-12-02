@@ -1,25 +1,36 @@
 import json
 import sys
+import random
+
+# Словарь символов и их вероятностей
+symbols_probabilities = {
+    '.': 0.4,  # Пример вероятности для символа "."
+    '#': 0.2,  # Пример вероятности для символа "#"
+    ',': 0.4,  # Пример вероятности для символа ","
+    '*': 0.3,  # Пример вероятности для символа "*"
+    '%': 0.1,   # Пример вероятности для символа "@"
+    '0': 0.1
+}
 
 while True:
-    # Создание двухмерного масива
-    MAP_SIZE = int(input("map size: "))
-    if MAP_SIZE == 0:
+    # Создание двумерного массива
+    map_size = int(input("Map size: "))
+    if map_size == 0:
         sys.exit()
-    MAP_CHAR = input("char: ")
-    DATA = [MAP_CHAR] * MAP_SIZE
-    for i in range(MAP_SIZE):
-        DATA[i] = [MAP_CHAR] * MAP_SIZE
 
-    # Подсчет чисел слева от каждой строки
-    for i in range(MAP_SIZE):
-        # Подсчет текущего числа
-        COUNT_STR = format(i, '02X')  # Форматирование чисел от 0 до FF
-        DATA[i].insert(0, COUNT_STR)  # Вставка числа слева от строки масива
+    data = []
 
-    # отображение масива
-    for i, DATA in enumerate(DATA):
-        print(*DATA)
+    # Генерация случайных символов с учетом вероятностей
+    for i in range(map_size):
+        row = [random.choices(list(symbols_probabilities.keys()), weights=list(symbols_probabilities.values()))[0] for _ in range(map_size)]
+#        count_str = format(i, '02X')  # Форматирование чисел от 0 до FF
+#        row.insert(0, count_str)  # Вставка числа слева от строки массива
+        data.append(row)
 
+    # Отображение массива
+    for row in data:
+        print(*row)
+
+    # Запись данных в JSON файл
     with open('data.json', 'w', encoding='utf8') as file:
-        json.dump(DATA, file)
+        json.dump(data, file)
