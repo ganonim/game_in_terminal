@@ -3,48 +3,54 @@ import json
 import sys
 import keyboard
 
-HERO_X = 8
-HERO_Y = 8
+KEYS_TO_CHECK = ['up', 'down', 'left', 'right']
+HERO_X = 0
+HERO_Y = 0
 KEY_PRESSED = False
 GAME_START = True
 
 with open('data.json', 'r', encoding="utf-8") as file:
     DATA = json.load(file)
 
-while True:
-    def Graphics():
-        os.system('clear')
-        DATA[HERO_Y][HERO_X] = "@"
-        for i, DATA_MAP in enumerate(DATA):
-            print(*DATA_MAP)
 
-    if GAME_START is True:
+def graphics():
+    os.system('clear')
+    DATA[HERO_Y][HERO_X] = "@"
+    for i, DATA_MAP in enumerate(DATA):
+        print(*DATA_MAP)
+
+
+def move_hero(dx, dy):
+    global HERO_X, HERO_Y
+    HERO_X += dx
+    HERO_Y += dy
+
+
+while True:
+    if GAME_START:
         GAME_START = False
-        Graphics()
+        graphics()
 
     if keyboard.is_pressed('up') and not KEY_PRESSED:
-        HERO_Y = HERO_Y-1
+        move_hero(0, -1)
         KEY_PRESSED = True
-        Graphics()
+        graphics()
     if keyboard.is_pressed('down') and not KEY_PRESSED:
-        HERO_Y = HERO_Y+1
+        move_hero(0, 1)
         KEY_PRESSED = True
-        Graphics()
+        graphics()
     elif keyboard.is_pressed('left') and not KEY_PRESSED:
-        HERO_X = HERO_X-1
+        move_hero(-1, 0)
         KEY_PRESSED = True
-        Graphics()
+        graphics()
     elif keyboard.is_pressed('right') and not KEY_PRESSED:
-        HERO_X = HERO_X+1
+        move_hero(1, 0)
         KEY_PRESSED = True
-        Graphics()
+        graphics()
     elif keyboard.is_pressed('esc'):
         sys.exit()
-    elif not keyboard.is_pressed('up') and not \
-            keyboard.is_pressed('down') and not \
-            keyboard.is_pressed('left') and not \
-            keyboard.is_pressed('right'):
+    if not any(keyboard.is_pressed(key) for key in KEYS_TO_CHECK):
         KEY_PRESSED = False
 
     with open('data.json', 'r', encoding="utf-8") as file:
-        data = json.load(file)
+        DATA = json.load(file)
