@@ -19,7 +19,7 @@ while True:
         sys.exit()
 
     data = []
-    
+
     # Генерация случайных символов с учетом вероятностей
     for i in range(map_size):
         row = [random.choices(list(symbols_probabilities.keys()),
@@ -34,4 +34,3 @@ while True:
     # Запись данных в JSON файл
     with open('data.json', 'w', encoding='utf8') as file:
         json.dump(data, file)
-
