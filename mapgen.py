@@ -6,5 +6,5 @@ for i in range(a):
     data[i] = ['.'] * a
 print(data)
 
-with open('data.json', 'w') as file:
-	json.dump(data, file)
+with open('data.json', 'w', encoding='utf8') as file:
+    json.dump(data, file)
