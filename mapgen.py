@@ -19,12 +19,12 @@ while True:
         sys.exit()
 
     data = []
-
+    
     # Генерация случайных символов с учетом вероятностей
     for i in range(map_size):
-        row = [random.choices(list(symbols_probabilities.keys()), weights=list(symbols_probabilities.values()))[0] for _ in range(map_size)]
-#        count_str = format(i, '02X')  # Форматирование чисел от 0 до FF
-#        row.insert(0, count_str)  # Вставка числа слева от строки массива
+        row = [random.choices(list(symbols_probabilities.keys()),
+               weights=list(symbols_probabilities.values()))[0]
+               for _ in range(map_size)]
         data.append(row)
 
     # Отображение массива
@@ -34,3 +34,4 @@ while True:
     # Запись данных в JSON файл
     with open('data.json', 'w', encoding='utf8') as file:
         json.dump(data, file)
+
