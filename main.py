@@ -1,50 +1,50 @@
 import os
 import json
+import sys
 import keyboard
 
-with open('data.json', 'r') as file:
-	data = json.load(file)
+HERO_X = 8
+HERO_Y = 8
+KEY_PRESSED = False
+GAME_START = True
 
-hero_x = 8
-hero_y = 8
-key_pressed = False
-start = True
+with open('data.json', 'r', encoding="utf-8") as file:
+    DATA = json.load(file)
 
 while True:
-	def graphics():
-		os.system('clear')
-		data[hero_y][hero_x] = "@"
-		for i in range(len(data)):
-			for j in range(len(data[0])):
-				print(data[i][j], end=" ")
-			print()
+    def Graphics():
+        os.system('clear')
+        DATA[HERO_Y][HERO_X] = "@"
+        for i, DATA_MAP in enumerate(DATA):
+            print(*DATA_MAP)
 
-	if start == True:
-		start = False
-		graphics()
+    if GAME_START is True:
+        GAME_START = False
+        Graphics()
 
-	if keyboard.is_pressed('up') and not key_pressed:
-		hero_y = hero_y-1
-		key_pressed = True
-		graphics()
-	if keyboard.is_pressed('down') and not key_pressed:
-		hero_y = hero_y+1
-		key_pressed = True
-		graphics()
-	elif keyboard.is_pressed('left') and not key_pressed:
-		hero_x = hero_x-1
-		key_pressed = True
-		graphics()
-	elif keyboard.is_pressed('right') and not key_pressed:
-		hero_x = hero_x+1
-		key_pressed = True
-		graphics()
-	elif keyboard.is_pressed('esc'):
-		exit()
-	elif not keyboard.is_pressed('up') and not keyboard.is_pressed('down') and not keyboard.is_pressed('left') and not keyboard.is_pressed('right'):
-		key_pressed = False
+    if keyboard.is_pressed('up') and not KEY_PRESSED:
+        HERO_Y = HERO_Y-1
+        KEY_PRESSED = True
+        Graphics()
+    if keyboard.is_pressed('down') and not KEY_PRESSED:
+        HERO_Y = HERO_Y+1
+        KEY_PRESSED = True
+        Graphics()
+    elif keyboard.is_pressed('left') and not KEY_PRESSED:
+        HERO_X = HERO_X-1
+        KEY_PRESSED = True
+        Graphics()
+    elif keyboard.is_pressed('right') and not KEY_PRESSED:
+        HERO_X = HERO_X+1
+        KEY_PRESSED = True
+        Graphics()
+    elif keyboard.is_pressed('esc'):
+        sys.exit()
+    elif not keyboard.is_pressed('up') and not \
+            keyboard.is_pressed('down') and not \
+            keyboard.is_pressed('left') and not \
+            keyboard.is_pressed('right'):
+        KEY_PRESSED = False
 
-	with open('data.json', 'r') as file:
-		data = json.load(file)
-
-
+    with open('data.json', 'r', encoding="utf-8") as file:
+        data = json.load(file)
