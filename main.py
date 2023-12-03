@@ -4,6 +4,7 @@ import sys
 import keyboard
 
 KEYS_TO_CHECK = ['up', 'down', 'left', 'right']
+SYMBOL_HERO = '@'
 HERO_X = 0
 HERO_Y = 0
 KEY_PRESSED = False
@@ -12,15 +13,17 @@ GAME_START = True
 with open('data.json', 'r', encoding="utf-8") as file:
     data = json.load(file)
 
+
 def graphics():
     os.system('clear')
-    data[HERO_Y][HERO_X] = "@"
+    row = data[HERO_Y]
+    data[HERO_Y] = row[:HERO_X] + SYMBOL_HERO + row[HERO_X + 1:]
     for i, DATA_MAP in enumerate(data):
         print(*DATA_MAP)
 
 
 def move_hero(dx, dy):
-    global HERO_X, HERO_Y, data
+    global HERO_X, HERO_Y
     new_x = HERO_X + dx
     new_y = HERO_Y + dy
     if 0 <= new_x < len(data[0]) and 0 <= new_y < len(data):
@@ -47,8 +50,6 @@ while True:
         elif keyboard.is_pressed('right'):
             move_hero(1, 0)
             KEY_PRESSED = True
-        if KEY_PRESSED:
-            graphics()
     if keyboard.is_pressed('esc'):
         print("good byeee~~~")
         sys.exit()
