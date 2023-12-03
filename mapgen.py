@@ -1,36 +1,51 @@
 import json
+import numpy as np
 import sys
-import random
+import noise
 
-# Словарь символов и их вероятностей
-symbols_probabilities = {
-    '.': 0.4,  # Пример вероятности для символа "."
-    '#': 0.2,  # Пример вероятности для символа "#"
-    ',': 0.4,  # Пример вероятности для символа ","
-    '*': 0.3,  # Пример вероятности для символа "*"
-    '%': 0.1,   # Пример вероятности для символа "@"
-    '0': 0.1
-}
+symbols = [' ', '.', '-', '=', '#']
+
+
+# Генерация шума Перлина с использованием seed
+def generate_perlin_noise(map_size, scale, octaves, persistence, seed):
+    perlin_img = np.zeros((map_size, map_size))
+
+    for y in range(map_size):
+        for x in range(map_size):
+            perlin_img[x][y] = noise.pnoise2(x / scale, y / scale, octaves=octaves, persistence=persistence, base=seed)
+
+    return perlin_img
+
 
 while True:
-    # Создание двумерного массива
     map_size = int(input("Map size: "))
     if map_size == 0:
         sys.exit()
 
-    data = []
+    # Задание случайного seed для генерации разного шума
+    seed_value = np.random.randint(0, 1000)
+    perlin_img = generate_perlin_noise(map_size, 10.0, 6, 0.5, seed_value)
 
-    # Генерация случайных символов с учетом вероятностей
-    for i in range(map_size):
-        row = [random.choices(list(symbols_probabilities.keys()),
-               weights=list(symbols_probabilities.values()))[0]
-               for _ in range(map_size)]
-        data.append(row)
+    # Определение диапазона значений для маппинга к символам
+    min_val = np.min(perlin_img)
+    max_val = np.max(perlin_img)
 
-    # Отображение массива
-    for row in data:
-        print(*row)
+    # Создание маппинга значений массива шума Перлина к символам
+    def map_value_to_symbol(value):
+        range_step = (max_val - min_val) / len(symbols)
+        index = min(int((value - min_val) / range_step), len(symbols) - 1)
+        return symbols[index]
 
+    # Создание списка символов на основе шума Перлина
+    symbol_map = []
+    for row in perlin_img:
+        symbol_row = [map_value_to_symbol(val) for val in row]
+        symbol_map.append(''.join(symbol_row))
+    
     # Запись данных в JSON файл
     with open('data.json', 'w', encoding='utf8') as file:
-        json.dump(data, file)
+        json.dump(symbol_map, file)
+
+    # Создание изображения с символами
+    for i, DATA_MAP in enumerate(symbol_map):
+        print(*DATA_MAP)
