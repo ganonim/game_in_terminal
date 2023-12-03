@@ -48,4 +48,4 @@ while True:
 
     # Создание изображения с символами
     for i, DATA_MAP in enumerate(symbol_map):
-        print(*DATA_MAP)s
+        print(*DATA_MAP)
