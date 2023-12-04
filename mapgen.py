@@ -57,8 +57,13 @@ def main(args):
     symbol_map = []
     for row in perlin_img:
         symbol_row = [map_value_to_symbol(val, min_val, max_val) for val in row]
-        symbol_map.append(symbol_row)
+        symbol_map.append(''.join(symbol_row))
 
+    # Запись данных в файл в формате JSON
+    with open('data.json', 'w', encoding="utf8") as file:
+        json.dump(symbol_map, file)
+    
+    
     # Вывод символов с соответствующими цветами в формате ANSI escape-последовательностей
     for row in symbol_map:
         colored_row = [
