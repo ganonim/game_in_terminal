@@ -2,14 +2,27 @@ import os
 import json
 import sys
 import keyboard
+from colorama import Fore, init
 
 KEYS_TO_CHECK = ['up', 'down', 'left', 'right']
+symbols = ['≈', '~', '.', '-', '=', '#']
 SYMBOL_HERO = '@'
 HERO_X = 0
 HERO_Y = 0
 KEY_PRESSED = False
 GAME_START = True
 
+init()
+
+# Считывание цветов в формате HEX из файла colors.txt
+with open('colors.txt', 'r') as file:
+    colors_hex = file.read().splitlines()
+
+# Преобразование значений HEX в ANSI escape-последовательности для установки цветов
+colors_ansi = [f"\033[38;2;{int(color[1:3], 16)};{int(color[3:5], 16)};{int(color[5:], 16)}m"
+               for color in colors_hex]
+
+# Считывание данных игры из data.json
 with open('data.json', 'r', encoding="utf-8") as file:
     data = json.load(file)
 
@@ -18,8 +31,14 @@ def graphics():
     os.system('clear')
     row = data[HERO_Y]
     data[HERO_Y] = row[:HERO_X] + SYMBOL_HERO + row[HERO_X + 1:]
-    for i, DATA_MAP in enumerate(data):
-        print(*DATA_MAP)
+    for row in data:
+        colored_row = [
+            f"{colors_ansi[symbols.index(char) % len(colors_ansi)]}{char}\033[0m" if char in symbols else char
+            for char in row]
+        print(*colored_row)
+    
+    #for i, DATA_MAP in enumerate(data):
+      #  print(*DATA_MAP)
 
 
 def move_hero(dx, dy):
