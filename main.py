@@ -36,9 +36,9 @@ def graphics():
             f"{colors_ansi[symbols.index(char) % len(colors_ansi)]}{char}\033[0m" if char in symbols else char
             for char in row]
         print(*colored_row)
-    
-    #for i, DATA_MAP in enumerate(data):
-      #  print(*DATA_MAP)
+
+
+graphics()
 
 
 def move_hero(dx, dy):
@@ -52,9 +52,6 @@ def move_hero(dx, dy):
 
 
 while True:
-    if GAME_START:
-        GAME_START = False
-        graphics()
 
     if not KEY_PRESSED:
         if keyboard.is_pressed('up'):
