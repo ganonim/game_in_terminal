@@ -10,7 +10,6 @@ SYMBOL_HERO = '@'
 HERO_X = 0
 HERO_Y = 0
 KEY_PRESSED = False
-GAME_START = True
 
 init()
 
@@ -36,8 +35,6 @@ def graphics():
             f"{colors_ansi[symbols.index(char) % len(colors_ansi)]}{char}\033[0m" if char in symbols else char
             for char in row]
         print(*colored_row)
-
-
 graphics()
 
 
